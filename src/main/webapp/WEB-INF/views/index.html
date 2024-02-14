@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+Choose department!
+<br>
+<div th:each="department : ${departments}">
+    <a th:href="@{/{id} (id=${department.getId()})}" th:text="${department}">user</a>
+</div>
+</body>
+</html>

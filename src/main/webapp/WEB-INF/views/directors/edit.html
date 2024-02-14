@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>EDIT</title>
+</head>
+<body>
+<form th:method="PATCH" th:action="@{/directors/{id} (id=${director.getId()})}" th:object="${director}">
+    <label for="name">Name</label>
+    <input th:field="*{name}" type="text" id="name"/>
+    <br>
+
+    <select name="department">
+        <option th:each="department : ${T(org.example.model.enums.Department).values()}"
+                th:value="${department}"
+                th:text="${department}"
+                th:selected="${department == selectedDepartment}">dep</option>
+    </select>
+    <br>
+
+    <input type="submit" value="upDate"/>
+</form>
+</body>
+</html>
