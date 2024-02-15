@@ -11,7 +11,7 @@
     <br>
 
     <select name="department">
-        <option th:each="department : ${T(org.example.model.enums.Department).values()}"
+        <option th:each="department : ${T(org.example.models.enums.Department).values()}"
                 th:value="${department}"
                 th:text="${department}"
                 th:selected="${department == selectedDepartment}">dep</option>

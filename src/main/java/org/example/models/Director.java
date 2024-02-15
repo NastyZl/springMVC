@@ -1,7 +1,7 @@
-package org.example.model;
+package org.example.models;
 
 
-import org.example.model.enums.Department;
+import org.example.models.enums.Department;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -11,18 +11,23 @@ import java.util.List;
 public class Director {
     private int id;
     @NotEmpty(message = "fill in the NAME field")
-    @Size(min= 2, max = 30, message = "Name should be 2-30 chars")
+    @Size(min = 2, max = 30, message = "Name should be 2-30 chars")
     private String name;
     private Department department;
-    //@Size(min=3, message = "There must be at least THREE subordinates")
+    @Size(min = 3, message = "There must be at least THREE subordinates")
+    @NotEmpty(message = "subordinate Employees null")
     List<Employee> subordinateEmployees;
 
-    public Director(int id, String name, Department department) {
+    public Director(int id, String name, Department department, List<Employee> subordinateEmployees) {
         this.id = id;
         this.name = name;
         this.department = department;
+        this.subordinateEmployees=subordinateEmployees;
+
     }
-    public Director(){}
+
+    public Director() {
+    }
 
     @Override
     public String toString() {
@@ -65,4 +70,8 @@ public class Director {
     public void setSubordinateEmployees(List<Employee> subordinateEmployees) {
         this.subordinateEmployees = subordinateEmployees;
     }
+    public void addSubordinateEmployee(Employee employee) {
+        subordinateEmployees.add(employee);
+    }
+
 }

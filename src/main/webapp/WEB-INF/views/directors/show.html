@@ -7,6 +7,11 @@
 <body>
 <p th:text="${director.getName()}"></p>
 <p th:text="${director.getDepartment()}"></p>
+<ul>
+    <li th:each="item : ${director.getSubordinateEmployees()}">
+        <span th:text="${item}"></span>
+    </li>
+</ul>
 <a th:href="@{/directors/{id}/edit (id=${director.getId()})}">EDIT</a>
 <form th:method="DELETE" th:action="@{/directors/{id} (id=${director.getId()})}">
     <input type="submit" value="DELETE">

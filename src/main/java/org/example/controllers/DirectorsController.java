@@ -2,34 +2,35 @@ package org.example.controllers;
 
 
 import org.example.NoVacancyForDirectorException;
-import org.example.repository.DirectorRepository;
-import org.example.model.Director;
+
+import org.example.models.Director;
+import org.example.service.DirectorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+
 
 import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/directors")
 public class DirectorsController {
-    private final DirectorRepository directorRepository;
+    private final DirectorService directorService;
 
-    public DirectorsController(DirectorRepository directorRepository) {
-        this.directorRepository = directorRepository;
+    public DirectorsController(DirectorService directorService) {
+        this.directorService = directorService;
     }
 
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("directors", directorRepository.index());
+        model.addAttribute("directors", directorService.getAllDirectors());
         return "directors/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("director", directorRepository.show(id));
+        model.addAttribute("director", directorService.getDirectorById(id));
         return "directors/show";
     }
 
@@ -42,17 +43,19 @@ public class DirectorsController {
     public String create(@ModelAttribute("director") @Valid Director director, BindingResult bindingResult) throws NoVacancyForDirectorException {
         if (bindingResult.hasErrors())
             return "directors/new";
-        if (directorRepository.existByDepartment(director.getDepartment())) {
+        if (directorService.isDirectorOfDepartmentPresent(director.getDepartment())) {
             throw new NoVacancyForDirectorException("The last director has not been fired yet((((");
         }
-        directorRepository.save(director);
+        directorService.saveDirector(director);
+        System.out.println(director);
+        System.out.println(directorService.getDirectorById(1));
         return "redirect:/directors";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("director", directorRepository.show(id));
-        model.addAttribute("selectedDepartment", directorRepository.show(id).getDepartment());
+        model.addAttribute("director", directorService.getDirectorById(id));
+        model.addAttribute("selectedDepartment", directorService.getDirectorById(id).getDepartment());
         return "directors/edit";
     }
 
@@ -60,21 +63,21 @@ public class DirectorsController {
     public String update(@ModelAttribute("director") @Valid Director director, BindingResult bindingResult, @PathVariable("id") int id) {
         if (bindingResult.hasErrors())
             return "directors/edit";
-        directorRepository.update(id, director);
+        directorService.updateDirector(id, director);
         return "redirect:/directors";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
-        directorRepository.delete(id);
+        directorService.deleteDirector(id);
         return "redirect:/directors";
     }
 
-    @ExceptionHandler(NoVacancyForDirectorException.class)
-    public void handlerException(Exception exception) {
-        ModelAndView modelAndView = new ModelAndView();
-
-    }
+//    @ExceptionHandler(NoVacancyForDirectorException.class)
+//    public void handlerException(Exception exception) {
+//        ModelAndView modelAndView = new ModelAndView();
+//
+//    }
 
 
 }

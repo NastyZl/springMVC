@@ -8,6 +8,7 @@
 </head>
 <body>
 <div class="container">
+    <h1 style="text-align: center">Create new director</h1>
     <form th:method="POST" th:action="@{/directors}" th:object="${director}">
         <div>
             <label for="name">Name: </label>
@@ -18,15 +19,15 @@
         <div>
             <label for name="department">Department: </label>
             <select name="department">
-                <option th:each="department : ${T(org.example.model.enums.Department).values()}"
+                <option th:each="department : ${T(org.example.models.enums.Department).values()}"
                         th:value="${department}"
                         th:text="${department}">dep
                 </option>
             </select>
         </div>
-
         <br>
-        <input type="submit" value="add Director"/>
+        <input type="submit" value="ADD"/>
+
     </form>
 </div>
 </body>

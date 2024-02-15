@@ -1,7 +1,7 @@
 package org.example.controllers;
 
 import org.example.repository.DirectorRepository;
-import org.example.model.enums.Department;
+import org.example.models.enums.Department;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,16 +15,16 @@ public class SpringController {
         this.directorRepository = directorRepository;
     }
 
-    @GetMapping("/{id}")
-    public String showDepartment(Model model, @PathVariable int id) {
-        model.addAttribute("director", directorRepository.showDirectorOfDepartment(id));
-        return "show";
-    }
-    @GetMapping()
-    public String  index(Model model) {
-        model.addAttribute("departments", Department.values());
-        return "index";
-    }
+//    @GetMapping("/{id}")
+//    public String showDepartment(Model model, @PathVariable int id) {
+//        model.addAttribute("director", directorRepository.getDirectorByDepartment(id));
+//        return "show";
+//    }
+//    @GetMapping()
+//    public String  index(Model model) {
+//        model.addAttribute("departments", Department.values());
+//        return "index";
+//    }
 
 
 }
