@@ -24,25 +24,6 @@
                         th:text="${department}">department
                 </option>
             </select>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Post</th>
-                    <th>Href</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="employee : *{subordinateEmployees}">
-                    <th th:text="${employee.getId()}">id</th>
-                    <td th:text="${employee.getName()}">name</td>
-                    <td th:text="${employee.getPost()}">department</td>
-                    <td><a th:href="@{/employees/{id} (id=${employee.getId()})}">show more...</a></td>
-                </tr>
-                </tbody>
-            </table>
-            <div><input type="submit" value="create new"></div>
         </div>
         <div th:if="${error}" class="alert alert-danger" role="alert">
             <p th:text="${error}"></p>
@@ -50,9 +31,7 @@
 <!--            <a th:href="@{/directors/{id} (id=${candidateFoDismissal.getId()})">look at him</a>-->
             <!--            <a th:href="@{/directors/{id} (id=${candidateFoDismissal.getId()}, back='new')}">look at him</a>-->
         </div>
-    </form>
-    <form th:method="GET" th:action="@{/employees/new}">
-
+        <div><input type="submit" value="add employees"></div>
     </form>
 
 </div>

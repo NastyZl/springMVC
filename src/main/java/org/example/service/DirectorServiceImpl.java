@@ -56,7 +56,7 @@ public class DirectorServiceImpl implements DirectorService {
 
     @Override
     public int getNewId() {
-        return directorRepository.count();
+        return directorRepository.count()+1;
     }
 
     @Override

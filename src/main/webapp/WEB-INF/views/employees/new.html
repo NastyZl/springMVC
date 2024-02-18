@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>CREATE DIRECTOR</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 </head>
+
 <body>
 <div class="container">
-<!--    <form th:method="POST" th:action="@{/employees}"-->
+    <form th:method="POST" th:action="@{/directors/save}" th:object="${director}" id="myForm">
         <div id="choose">
             <table class="table table-striped">
                 <thead>
@@ -25,51 +28,74 @@
                     <td th:text="${employee.post}">department</td>
                     <td><a th:href="@{/employees/{id} (id=${employee.getId()})}">show more...</a></td>
                     <td>
-                        <input type="checkbox" th:id="'checkbox' + ${employee.id}">
+                        <input type="checkbox"
+                               th:id="'checkbox' + ${employee.id}"
+                               th:dataEmployee="${employee.id}"
+                               th:dataDirector="${director.id}"
+                               th:onclick="addEmployee(this.getAttribute('dataemployee'), this.getAttribute('datadirector'))"/>
                     </td>
                 </tr>
-                <button onclick="submitData()">Отправить</button>
-
                 </tbody>
             </table>
+            <div style="display: none">
+                <label for="name">Name: </label>
+                <input th:field="*{id}" type="text" id="id"/>
+                <input th:field="*{name}" type="text" id="name"/>
+                <input th:field="*{department}" type="text" id="department"/>
+            </div>
+            <br>
+            <div>
+                <div><input type="submit" value="save director"></div>
+            </div>
+            <div th:if="${error}" class="alert alert-danger" role="alert">
+                <p th:text="${error}"></p>
+                <p>The director must have at least 3 employees!</p>
+            </div>
+
+
         </div>
-
-<!--    </form>-->
-
+    </form>
 </div>
 </body>
+
+
 <script type="text/javascript">
-    function chooseEmployee(id){
-        let checkbox = document.getElementById("checkbox"+id)
+    function addEmployee(employee, director) {
+        let checkbox = document.getElementById("checkbox" + employee)
         if (checkbox.checked) {
-            director
-
-            // alert('ffff')
-            //  alert('[[${director.getSubordinateEmployees()}]]')
-            // window.location.href = '/employees'
+            $(document).ready(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/employees/set-director',
+                    data: {
+                        employeeId: employee,
+                        directorId: director
+                    }
+                });
+            });
+        } else {
+            $(document).ready(function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/employees/remove-director',
+                    data: {
+                        employeeId: employee
+                    }
+                });
+            });
         }
+    }
 
-    }
-    function handleCheckboxChange(employeeId) {
-        alert('ffff')
-        // // Получить объект сотрудника по ID
-        // var employee = employees.find(function(emp) {
-        //     return emp.id === employeeId;
-        // });
-        //
-        // // Вызвать метод director.getSubordinateEmployees(employee)
-        // director.getSubordinateEmployees(employee);
-    }
-    function submitData() {
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        var selectedValues = [];
-
-        checkboxes.forEach(function(checkbox) {
-            if (checkbox.checked) {
-                selectedValues.push(checkbox.value);
-            }
-        });
-        console.log(selectedValues);
-    }
+    // function submitData() {
+    //     var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    //     var selectedValues = [];
+    //
+    //     checkboxes.forEach(function (checkbox) {
+    //         if (checkbox.checked) {
+    //             selectedValues.push(checkbox.value);
+    //         }
+    //     });
+    //     console.log(selectedValues);
+    // }
 </script>
 </html>

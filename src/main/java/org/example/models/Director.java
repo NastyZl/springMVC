@@ -16,8 +16,8 @@ public class Director {
     @Size(min = 2, max = 30, message = "Name should be 2-30 chars")
     private String name;
     private Department department;
-//    @Size(min = 3, message = "There must be at least THREE subordinates")
-//    @NotEmpty(message = "subordinate Employees null")
+    @Size(min = 3, message = "There must be at least THREE subordinates")
+    @NotEmpty(message = "subordinate Employees null")
     List<Employee> subordinateEmployees;
 
     public Director(int id, String name, Department department, List<Employee> subordinateEmployees) {

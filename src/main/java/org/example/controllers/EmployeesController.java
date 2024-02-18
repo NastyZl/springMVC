@@ -32,7 +32,7 @@ public class EmployeesController {
         return "employees/index";
     }
     @GetMapping("/new")
-    public String newEmployee(Model model) {
+    public String newEmployee(Model model, @ModelAttribute("director") Director director, RedirectAttributes redirectAttributes) {
         List<Employee> employees = employeeService.getAllEmployee().stream().filter(employee -> employee.getIdDirector() == 0).collect(Collectors.toList());
         model.addAttribute("employees", employees);
         model.addAttribute("director", (Director) model.getAttribute("director") );
@@ -42,13 +42,25 @@ public class EmployeesController {
     @PostMapping()
     public String create(@ModelAttribute("employee") Employee employee, @ModelAttribute("director") Director director,BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws NoVacancyForDirectorException {
         employee.setIdDirector(directorService.getNewId());
-        System.out.println(employee);
         employeeService.saveEmployee(employee);
-//        redirectAttributes.addAttribute("employee", employee);
-//        redirectAttributes.addAttribute("id", director.getId());
-        System.out.println(director);
-        System.out.println(employee);
         return "redirect:directors/new";
+    }
+    @PostMapping("set-director")
+    public String setDirector(@RequestParam int employeeId,
+                              @RequestParam int directorId, Model model) {
+        employeeService.setDirectorId(employeeId, directorId);
+       // directorService.getDirectorById(directorId).
+        //TODO: обновить директора
+        System.out.println(employeeService.getAllEmployee());
+        return "redirect:/employees/new";
+    }
+
+    @PostMapping("remove-director")
+    public String removeDirector(@RequestParam int employeeId) {
+        employeeService.removeDirectorId(employeeId);
+        //TODO: обновить директора
+        System.out.println(employeeService.getAllEmployee());
+        return "redirect:/employees/new";
     }
 
 }

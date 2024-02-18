@@ -14,6 +14,8 @@
         <tr>
             <th>#</th>
             <th>Name</th>
+
+            <th>idDir</th>
             <th>Post</th>
             <th>Href</th>
         </tr>
@@ -22,6 +24,7 @@
         <tr th:each="employee : ${employees}">
             <th th:text="${employee.getId()}">id</th>
             <td th:text="${employee.getName()}">name</td>
+            <td th:text="${employee.getIdDirector()}">name</td>
             <td th:text="${employee.getPost()}">department</td>
             <td><a th:href="@{/employees/{id} (id=${employee.getId()})}">show more...</a></td>
         </tr>
