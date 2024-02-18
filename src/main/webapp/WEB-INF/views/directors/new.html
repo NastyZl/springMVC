@@ -8,8 +8,8 @@
 </head>
 <body>
 <div class="container">
-    <h1 style="text-align: center">Create new director</h1>
     <form th:method="POST" th:action="@{/directors}" th:object="${director}">
+        <h1>Create new director</h1>
         <div>
             <label for="name">Name: </label>
             <input th:field="*{name}" type="text" id="name"/>
@@ -19,16 +19,42 @@
         <div>
             <label for name="department">Department: </label>
             <select name="department">
-                <option th:each="department : ${T(org.example.models.enums.Department).values()}"
+                <option th:each="department : ${T(org.example.model.enums.Department).values()}"
                         th:value="${department}"
-                        th:text="${department}">dep
+                        th:text="${department}">department
                 </option>
             </select>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Post</th>
+                    <th>Href</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="employee : *{subordinateEmployees}">
+                    <th th:text="${employee.getId()}">id</th>
+                    <td th:text="${employee.getName()}">name</td>
+                    <td th:text="${employee.getPost()}">department</td>
+                    <td><a th:href="@{/employees/{id} (id=${employee.getId()})}">show more...</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <div><input type="submit" value="create new"></div>
         </div>
-        <br>
-        <input type="submit" value="ADD"/>
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <p th:text="${error}"></p>
+            <p>First he needs to be fired....</p>
+<!--            <a th:href="@{/directors/{id} (id=${candidateFoDismissal.getId()})">look at him</a>-->
+            <!--            <a th:href="@{/directors/{id} (id=${candidateFoDismissal.getId()}, back='new')}">look at him</a>-->
+        </div>
+    </form>
+    <form th:method="GET" th:action="@{/employees/new}">
 
     </form>
+
 </div>
 </body>
 </html>

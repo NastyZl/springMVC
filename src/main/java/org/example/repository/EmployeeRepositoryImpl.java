@@ -5,9 +5,10 @@ import org.example.models.Employee;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
-public class EmployeeRepositoryImpl implements EmployeeRepository {
+public class EmployeeRepositoryImpl implements Repository<Employee> {
     private final List<Employee> employees;
 
     public EmployeeRepositoryImpl(List<Employee> employees) {
@@ -20,32 +21,31 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public Employee findById(int id) {
-        return employees.stream().filter(employees -> employees.getId() == id).findFirst().orElse(null);
+    public Optional<Employee> findById(int id) {
+        return employees.stream().filter(employees -> employees.getId() == id).findFirst();
     }
 
     @Override
     public void save(Employee employee) {
-        employee.setId(getLastId());
+        employee.setId(employees.size() + 1);
         employees.add(employee);
-    }
-
-    public int getLastId() {
-        if (employees.isEmpty()) {
-            return 1;
-        }
-        return employees.get(employees.size() - 1).getId() + 1;
     }
 
     @Override
     public void update(int id, Employee employee) {
-        Employee employeeToBeUpdated = findById(id);
-        employeeToBeUpdated.setName(employee.getName());
-        employeeToBeUpdated.setPost(employee.getPost());
+        findById(id).ifPresent(employeeToBeUpdated -> {
+            employeeToBeUpdated.setName(employee.getName());
+            employeeToBeUpdated.setPost(employee.getPost());
+        });
     }
 
     @Override
     public void delete(int id) {
         employees.removeIf(employee -> employee.getId() == id);
+    }
+
+    @Override
+    public int count() {
+        return 0;
     }
 }

@@ -2,7 +2,7 @@ package org.example.service;
 
 import org.example.models.Director;
 import org.example.models.enums.Department;
-import org.example.repository.DirectorRepository;
+import org.example.repository.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.Optional;
 @Service
 public class DirectorServiceImpl implements DirectorService {
 
-    private final DirectorRepository directorRepository;
+    private final Repository<Director> directorRepository;
 
-    public DirectorServiceImpl(DirectorRepository directorRepository) {
+    public DirectorServiceImpl(Repository<Director> directorRepository) {
         this.directorRepository = directorRepository;
     }
 
@@ -24,14 +24,8 @@ public class DirectorServiceImpl implements DirectorService {
 
     @Override
     public Director getDirectorById(int id) {
-        Optional<Director> optionalDirector = Optional.ofNullable(directorRepository.findById(id));
-        Director director = null;
-        if (optionalDirector.isPresent()) {
-            director = optionalDirector.get();
-        } else {
-            throw new RuntimeException("Director with id=" + id + " don't exist");
-        }
-        return director;
+        return directorRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Director with id=" + id + " don't exist"));
     }
 
     @Override
@@ -46,7 +40,7 @@ public class DirectorServiceImpl implements DirectorService {
 
     @Override
     public void updateDirector(int id, Director director) {
-        Optional<Director> optionalDirectorRepository = Optional.ofNullable(directorRepository.findById(id));
+        Optional<Director> optionalDirectorRepository = directorRepository.findById(id);
         Optional<Director> optionalDirectorToUpdate = Optional.ofNullable(director);
         if (optionalDirectorRepository.isPresent() && optionalDirectorToUpdate.isPresent()) {
             directorRepository.update(id, optionalDirectorToUpdate.get());
@@ -58,6 +52,11 @@ public class DirectorServiceImpl implements DirectorService {
     @Override
     public void deleteDirector(int id) {
         this.directorRepository.delete(id);
+    }
+
+    @Override
+    public int getNewId() {
+        return directorRepository.count();
     }
 
     @Override

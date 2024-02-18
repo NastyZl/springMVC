@@ -4,10 +4,9 @@ import org.example.models.Director;
 import org.example.models.Employee;
 import org.example.models.enums.Department;
 import org.example.models.enums.Post;
-import org.example.repository.DirectorRepository;
 import org.example.repository.DirectorRepositoryImpl;
-import org.example.repository.EmployeeRepository;
 import org.example.repository.EmployeeRepositoryImpl;
+import org.example.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -20,10 +19,9 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @ComponentScan("org.example")
@@ -52,29 +50,47 @@ public class SpringConfig implements WebMvcConfigurer {
         templateEngine.setEnableSpringELCompiler(true);
         return templateEngine;
     }
+
     @Bean
-    public DirectorRepository directorRepository() {
+    public List<Employee> defaultEmployeeList() {
+        List<Employee> employees= new ArrayList<>();
+        employees.add(new Employee(1, 1,"IVAN", Post.ANALYST));
+        employees.add(new Employee(2, 1,"DASHA",Post.TESTER));
+        employees.add(new Employee(3, 1,"SASHA",Post.DEVELOPER));
+        employees.add(new Employee(4, "IVAN", Post.ANALYST));
+        employees.add(new Employee(5, "DASHA",Post.TESTER));
+        employees.add(new Employee(6, "SASHA",Post.DEVELOPER));
+        return employees;
+    }
+
+    @Bean
+    public Repository<Director> directorRepository(List<Employee> defaultEmployeeList) {
         List<Director> directors= new ArrayList<>();
-        directors.add(new Director(1, "IVAN", Department.DEVELOPMENT,employeeRepositorySASHA().findAll()));
-        directors.add(new Director(2, "SASHA", Department.SECURITY, null));
-        directors.add(new Director(3, "PETR", Department.MANAGEMENT, null));
+        directors.add(new Director(1, "IVAN", Department.DEVELOPMENT, getEmployeesByDirectorId(defaultEmployeeList, 1)));
+
         return new DirectorRepositoryImpl(directors);
+    }
+
+    private static List<Employee> getEmployeesByDirectorId(List<Employee> defaultEmployeeList, int id) {
+        return defaultEmployeeList
+                .stream()
+                .filter((employee -> employee.getIdDirector() == id)).collect(Collectors.toList());
     }
 //    @Bean
 //    public EmployeeRepository employeeRepositoryIVAN() {
 //        return getEmployeeRepository();
 //    }
-    @Bean
-    public EmployeeRepository employeeRepositorySASHA() {
-        List<Employee> employees= new ArrayList<>();
-        employees.add(new Employee(1, "IVAN", Post.ANALYST));
-        employees.add(new Employee(2, "DASHA",Post.TESTER));
-        employees.add(new Employee(3, "SASHA",Post.DEVELOPER));
-        employees.add(new Employee(4, "IVAN", Post.ANALYST));
-        employees.add(new Employee(5, "DASHA",Post.TESTER));
-        employees.add(new Employee(6, "SASHA",Post.DEVELOPER));
-        return new EmployeeRepositoryImpl(employees);
-    }
+//    @Bean
+//    public EmployeeRepository employeeRepositorySASHA() {
+//        List<Employee> employees= new ArrayList<>();
+//        employees.add(new Employee(1, "IVAN", Post.ANALYST));
+//        employees.add(new Employee(2, "DASHA",Post.TESTER));
+//        employees.add(new Employee(3, "SASHA",Post.DEVELOPER));
+//        employees.add(new Employee(4, "IVAN", Post.ANALYST));
+//        employees.add(new Employee(5, "DASHA",Post.TESTER));
+//        employees.add(new Employee(6, "SASHA",Post.DEVELOPER));
+//        return new EmployeeRepositoryImpl(employees);
+//    }
 
 
     @Override

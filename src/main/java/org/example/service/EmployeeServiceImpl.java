@@ -1,16 +1,15 @@
 package org.example.service;
 
 import org.example.models.Employee;
-import org.example.repository.EmployeeRepository;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.example.repository.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
-    private final EmployeeRepository employeeRepository;
+    private final Repository<Employee> employeeRepository;
 
-    public EmployeeServiceImpl(@Qualifier("employeeRepositorySASHA") EmployeeRepository employeeRepository) {
+    public EmployeeServiceImpl( Repository<Employee> employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
@@ -18,4 +17,12 @@ public class EmployeeServiceImpl implements EmployeeService{
     public List<Employee> getAllEmployee() {
         return employeeRepository.findAll();
     }
+
+    @Override
+    public void saveEmployee(Employee employee) {
+
+        employeeRepository.save(employee);
+
+    }
+
 }

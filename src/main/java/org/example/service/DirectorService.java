@@ -13,6 +13,7 @@ public interface DirectorService {
     void updateDirector(int id, Director director);
 
     void deleteDirector(int id);
+    int getNewId();
     boolean isDirectorOfDepartmentPresent(Department department);
 
 }
