@@ -3,6 +3,7 @@ package org.example.controllers;
 import org.example.NoVacancyForDirectorException;
 import org.example.models.Director;
 import org.example.models.Employee;
+import org.example.models.enums.Department;
 import org.example.service.DirectorService;
 import org.example.service.EmployeeService;
 import org.springframework.stereotype.Controller;
@@ -11,8 +12,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -31,36 +32,49 @@ public class EmployeesController {
         model.addAttribute("employees", employeeService.getAllEmployee());
         return "employees/index";
     }
-    @GetMapping("/new")
-    public String newEmployee(Model model, @ModelAttribute("director") Director director, RedirectAttributes redirectAttributes) {
+    @GetMapping("/{id}")
+    public String show(@PathVariable("id") int id, Model model) {
+        model.addAttribute("employee", employeeService.getEmployeeById(id));
+        return "directors/show";
+    }
+
+    @GetMapping("/add-to-director")
+    public String addToDirector(Model model, @ModelAttribute("director") Director director) {
         List<Employee> employees = employeeService.getAllEmployee().stream().filter(employee -> employee.getIdDirector() == 0).collect(Collectors.toList());
+        if (employees.isEmpty()) {
+            return "error";
+        }
         model.addAttribute("employees", employees);
-        model.addAttribute("director", (Director) model.getAttribute("director") );
+        model.addAttribute("director", (Director) model.getAttribute("director"));
+        model.addAttribute("error", model.getAttribute("bindingResult"));
+        return "employees/add-to-director";
+    }
+
+    @GetMapping("/new")
+    public String createEmployee(@ModelAttribute("employee") Employee employee, Model model) {
+        model.addAttribute("directors", directorService.getDirectorDepartmentMap());
         return "employees/new";
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("employee") Employee employee, @ModelAttribute("director") Director director,BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws NoVacancyForDirectorException {
-        employee.setIdDirector(directorService.getNewId());
+    public String create(@ModelAttribute("employee") Employee employee, @ModelAttribute("director") Director director, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws NoVacancyForDirectorException {
+        if (bindingResult.hasFieldErrors("name")) {
+            return "directors/new";
+        }
         employeeService.saveEmployee(employee);
-        return "redirect:directors/new";
+        return "employees/show";
     }
+
     @PostMapping("set-director")
     public String setDirector(@RequestParam int employeeId,
-                              @RequestParam int directorId, Model model) {
+                              @RequestParam int directorId) {
         employeeService.setDirectorId(employeeId, directorId);
-       // directorService.getDirectorById(directorId).
-        //TODO: обновить директора
-        System.out.println(employeeService.getAllEmployee());
         return "redirect:/employees/new";
     }
 
     @PostMapping("remove-director")
     public String removeDirector(@RequestParam int employeeId) {
         employeeService.removeDirectorId(employeeId);
-        //TODO: обновить директора
-        System.out.println(employeeService.getAllEmployee());
         return "redirect:/employees/new";
     }
-
 }

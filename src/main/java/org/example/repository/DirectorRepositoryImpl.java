@@ -16,7 +16,6 @@ public class DirectorRepositoryImpl implements Repository<Director> {
     @PostConstruct
     public void postConstruct() {
         COUNT_DIRECTORS = directors.size();
-        System.out.println(COUNT_DIRECTORS);
     }
 
     public DirectorRepositoryImpl(List<Director> directors) {
@@ -43,7 +42,6 @@ public class DirectorRepositoryImpl implements Repository<Director> {
         findById(id).ifPresent(directorToBeUpdated -> {
             directorToBeUpdated.setName(director.getName());
             directorToBeUpdated.setDepartment(director.getDepartment());
-            directorToBeUpdated.setSubordinateEmployees(director.getSubordinateEmployees());
         });
 
     }

@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 public class Director {
@@ -16,15 +16,13 @@ public class Director {
     @Size(min = 2, max = 30, message = "Name should be 2-30 chars")
     private String name;
     private Department department;
-    @Size(min = 3, message = "There must be at least THREE subordinates")
-    @NotEmpty(message = "subordinate Employees null")
-    List<Employee> subordinateEmployees;
+    private List<Employee> subordinateEmployees;
 
     public Director(int id, String name, Department department, List<Employee> subordinateEmployees) {
         this.id = id;
         this.name = name;
         this.department = department;
-        this.subordinateEmployees=subordinateEmployees;
+        this.subordinateEmployees = subordinateEmployees;
 
     }
 
@@ -72,6 +70,11 @@ public class Director {
     public void setSubordinateEmployees(List<Employee> subordinateEmployees) {
         this.subordinateEmployees = subordinateEmployees;
     }
+//    public void deleteSubordinateEmployees(int idEmployee) {
+//        subordinateEmployees.stream().filter(employee -> employee.getId() == idEmployee).findFirst().;
+//        this.subordinateEmployees = subordinateEmployees;
+//    }
+
     public void addSubordinateEmployee(Employee employee) {
         if (this.subordinateEmployees == null) {
             this.subordinateEmployees = new ArrayList<>();

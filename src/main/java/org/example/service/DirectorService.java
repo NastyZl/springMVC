@@ -4,6 +4,7 @@ import org.example.models.Director;
 import org.example.models.enums.Department;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DirectorService {
     List<Director> getAllDirectors();
@@ -15,5 +16,6 @@ public interface DirectorService {
     void deleteDirector(int id);
     int getNewId();
     boolean isDirectorOfDepartmentPresent(Department department);
+    Map<Integer, Department> getDirectorDepartmentMap();
 
 }

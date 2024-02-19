@@ -3,21 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>EDIT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
 <form th:method="PATCH" th:action="@{/directors/{id} (id=${director.getId()})}" th:object="${director}">
     <label for="name">Name</label>
     <input th:field="*{name}" type="text" id="name"/>
     <br>
-
-    <select name="department">
+    <label for="department">Department</label>
+    <select name="department" id="department">
         <option th:each="department : ${T(org.example.models.enums.Department).values()}"
                 th:value="${department}"
                 th:text="${department}"
-                th:selected="${department == selectedDepartment}">dep</option>
+                th:selected="${department == selectedDepartment}">dep
+        </option>
     </select>
     <br>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Post</th>
 
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${director.getSubordinateEmployees()}">
+            <td th:text="${employee.name}">name</td>
+            <td th:text="${employee.post}">post</td>
+        </tr>
+        </tbody>
+    </table>
     <input type="submit" value="upDate"/>
 </form>
 </body>

@@ -4,12 +4,18 @@ package org.example.repository;
 import org.example.models.Employee;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 
 @Component
 public class EmployeeRepositoryImpl implements Repository<Employee> {
     private final List<Employee> employees;
+    private int COUNT_EMPLOYEE;
+    @PostConstruct
+    public void postConstruct() {
+        this.COUNT_EMPLOYEE = employees.size();
+    }
 
     public EmployeeRepositoryImpl(List<Employee> employees) {
         this.employees = employees;
@@ -27,7 +33,7 @@ public class EmployeeRepositoryImpl implements Repository<Employee> {
 
     @Override
     public void save(Employee employee) {
-        employee.setId(employees.size() + 1);
+        employee.setId(++COUNT_EMPLOYEE);
         employees.add(employee);
     }
 
@@ -36,6 +42,7 @@ public class EmployeeRepositoryImpl implements Repository<Employee> {
         findById(id).ifPresent(employeeToBeUpdated -> {
             employeeToBeUpdated.setName(employee.getName());
             employeeToBeUpdated.setPost(employee.getPost());
+            employeeToBeUpdated.setIdDirector(employee.getIdDirector());
         });
     }
 
@@ -46,6 +53,6 @@ public class EmployeeRepositoryImpl implements Repository<Employee> {
 
     @Override
     public int count() {
-        return 0;
+        return COUNT_EMPLOYEE;
     }
 }

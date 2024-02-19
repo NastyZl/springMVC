@@ -1,20 +1,27 @@
 package org.example.service;
 
 import org.example.models.Director;
+import org.example.models.Employee;
 import org.example.models.enums.Department;
 import org.example.repository.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class DirectorServiceImpl implements DirectorService {
 
     private final Repository<Director> directorRepository;
+    private final Repository<Employee> employeeRepository;
 
-    public DirectorServiceImpl(Repository<Director> directorRepository) {
+
+    public DirectorServiceImpl(Repository<Director> directorRepository,Repository<Employee> employeeRepository) {
         this.directorRepository = directorRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
@@ -51,6 +58,8 @@ public class DirectorServiceImpl implements DirectorService {
 
     @Override
     public void deleteDirector(int id) {
+        employeeRepository.findAll().stream().filter(employee -> employee.getIdDirector() == id)
+                .forEach(employee -> employee.setIdDirector(0));
         this.directorRepository.delete(id);
     }
 
@@ -63,4 +72,11 @@ public class DirectorServiceImpl implements DirectorService {
     public boolean isDirectorOfDepartmentPresent(Department department) {
         return directorRepository.findAll().stream().anyMatch(director -> director.getDepartment() == department);
     }
+    @Override
+    public  Map<Integer, Department> getDirectorDepartmentMap() {
+         return directorRepository.findAll().stream()
+                .collect(Collectors.toMap(Director::getId, Director::getDepartment));
+    }
+
+
 }

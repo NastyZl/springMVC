@@ -19,7 +19,7 @@
         <div>
             <label for name="department">Department: </label>
             <select name="department">
-                <option th:each="department : ${T(org.example.model.enums.Department).values()}"
+                <option th:each="department : ${T(org.example.models.enums.Department).values()}"
                         th:value="${department}"
                         th:text="${department}">department
                 </option>
@@ -28,11 +28,10 @@
         <div th:if="${error}" class="alert alert-danger" role="alert">
             <p th:text="${error}"></p>
             <p>First he needs to be fired....</p>
-<!--            <a th:href="@{/directors/{id} (id=${candidateFoDismissal.getId()})">look at him</a>-->
-            <!--            <a th:href="@{/directors/{id} (id=${candidateFoDismissal.getId()}, back='new')}">look at him</a>-->
         </div>
         <div><input type="submit" value="add employees"></div>
     </form>
+
 
 </div>
 </body>

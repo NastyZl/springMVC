@@ -6,14 +6,16 @@ import org.example.repository.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-@Service
-public class EmployeeServiceImpl implements EmployeeService{
-    private final Repository<Director> directorRepository;
-    private final Repository<Employee> employeeRepository;
+import java.util.Optional;
 
-    public EmployeeServiceImpl(Repository<Director> directorRepository, Repository<Employee> employeeRepository) {
-        this.directorRepository = directorRepository;
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+    private final Repository<Employee> employeeRepository;
+    private final Repository<Director> directorRepository;
+
+    public EmployeeServiceImpl(Repository<Employee> employeeRepository, Repository<Director> directorRepository) {
         this.employeeRepository = employeeRepository;
+        this.directorRepository = directorRepository;
     }
 
     @Override
@@ -24,20 +26,16 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public Employee getEmployeeById(int id) {
         return employeeRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Director with id=" + id + " don't exist"));
-
+                .orElseThrow(() -> new RuntimeException("Employee with id=" + id + " don't exist"));
     }
 
     @Override
     public void saveEmployee(Employee employee) {
-
         employeeRepository.save(employee);
-
     }
 
     @Override
     public void setDirectorId(int employeeId, int directorId) {
-    //    Director director = directorRepository.findById(directorId).orElseThrow(() -> new IllegalArgumentException("такого директора нет"));
         employeeRepository.findById(employeeId).ifPresent((employee -> {
             employee.setIdDirector(directorId);
         }));
@@ -49,6 +47,37 @@ public class EmployeeServiceImpl implements EmployeeService{
         employeeRepository.findById(employeeId).ifPresent((employee -> {
             employee.setIdDirector(0);
         }));
+    }
+
+    @Override
+    public void updateEmployee(int id, Employee employee) {
+        Optional<Employee> optionalEmployeeRepository = employeeRepository.findById(id);
+        Optional<Employee> optionalEmployeeToUpdate = Optional.ofNullable(employee);
+        if (optionalEmployeeRepository.isPresent() && optionalEmployeeToUpdate.isPresent()) {
+            employeeRepository.update(id, optionalEmployeeToUpdate.get());
+        } else {
+            throw new RuntimeException("UPDATE");
+        }
+    }
+
+    @Override
+    public void deleteEmployee(int id) {
+
+    }
+
+//    @Override
+//    public void deleteEmployee(int id) {
+//        Optional<Employee> employee = employeeRepository.findById(id);
+//        employee.ifPresent(e -> {
+//            Optional<Director> director = directorRepository.findById(e.getIdDirector());
+//            director.ifPresent(d -> d.);
+//        });
+//        this.employeeRepository.delete(id);
+//    }
+
+    @Override
+    public int getNewId() {
+        return 0;
     }
 
 }

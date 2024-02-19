@@ -2,9 +2,14 @@ package org.example.models;
 
 import org.example.models.enums.Post;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 public class Employee {
     private int id;
     private int idDirector;
+    @NotEmpty(message = "fill in the NAME field")
+    @Size(min = 2, max = 30, message = "Name should be 2-30 chars")
     private String name;
     private Post post;
 

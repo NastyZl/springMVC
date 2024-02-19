@@ -5,7 +5,6 @@ import org.example.models.Employee;
 import org.example.models.enums.Department;
 import org.example.models.enums.Post;
 import org.example.repository.DirectorRepositoryImpl;
-import org.example.repository.EmployeeRepositoryImpl;
 import org.example.repository.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -53,19 +52,25 @@ public class SpringConfig implements WebMvcConfigurer {
 
     @Bean
     public List<Employee> defaultEmployeeList() {
-        List<Employee> employees= new ArrayList<>();
-        employees.add(new Employee(1, 1,"IVAN", Post.ANALYST));
-        employees.add(new Employee(2, 1,"DASHA",Post.TESTER));
-        employees.add(new Employee(3, 1,"SASHA",Post.DEVELOPER));
+        List<Employee> employees = new ArrayList<>();
+        employees.add(new Employee(1, 1, "IVAN", Post.ANALYST));
+        employees.add(new Employee(2, 1, "DASHA", Post.TESTER));
+        employees.add(new Employee(3, 1, "SASHA", Post.DEVELOPER));
         employees.add(new Employee(4, "IVAN", Post.ANALYST));
-        employees.add(new Employee(5, "DASHA",Post.TESTER));
-        employees.add(new Employee(6, "SASHA",Post.DEVELOPER));
+        employees.add(new Employee(5, "DASHA", Post.TESTER));
+        employees.add(new Employee(6, "SASHA", Post.DEVELOPER));
+        employees.add(new Employee(7, "IVAN", Post.ANALYST));
+        employees.add(new Employee(8, "DASHA", Post.TESTER));
+        employees.add(new Employee(9, "SASHA", Post.DEVELOPER));
+        employees.add(new Employee(10, "IVAN", Post.ANALYST));
+        employees.add(new Employee(11, "DASHA", Post.TESTER));
+        employees.add(new Employee(12, "SASHA", Post.DEVELOPER));
         return employees;
     }
 
     @Bean
     public Repository<Director> directorRepository(List<Employee> defaultEmployeeList) {
-        List<Director> directors= new ArrayList<>();
+        List<Director> directors = new ArrayList<>();
         directors.add(new Director(1, "IVAN", Department.DEVELOPMENT, getEmployeesByDirectorId(defaultEmployeeList, 1)));
 
         return new DirectorRepositoryImpl(directors);
@@ -76,22 +81,6 @@ public class SpringConfig implements WebMvcConfigurer {
                 .stream()
                 .filter((employee -> employee.getIdDirector() == id)).collect(Collectors.toList());
     }
-//    @Bean
-//    public EmployeeRepository employeeRepositoryIVAN() {
-//        return getEmployeeRepository();
-//    }
-//    @Bean
-//    public EmployeeRepository employeeRepositorySASHA() {
-//        List<Employee> employees= new ArrayList<>();
-//        employees.add(new Employee(1, "IVAN", Post.ANALYST));
-//        employees.add(new Employee(2, "DASHA",Post.TESTER));
-//        employees.add(new Employee(3, "SASHA",Post.DEVELOPER));
-//        employees.add(new Employee(4, "IVAN", Post.ANALYST));
-//        employees.add(new Employee(5, "DASHA",Post.TESTER));
-//        employees.add(new Employee(6, "SASHA",Post.DEVELOPER));
-//        return new EmployeeRepositoryImpl(employees);
-//    }
-
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {

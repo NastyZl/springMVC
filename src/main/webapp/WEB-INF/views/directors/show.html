@@ -10,11 +10,11 @@
 <div class="container">
     <h1 th:text="${director.getName()}"></h1>
     <div style="display: flex">
-        <p><b>Name: </b></p>
+        <p style="padding-right: 10px;"><b>Name: </b></p>
         <p th:text="${director.getName()}"></p>
     </div>
     <div style="display: flex">
-        <p><b>Department: </b></p>
+        <p style="padding-right: 10px;"><b>Department: </b></p>
         <p th:text="${director.getDepartment()}"></p>
     </div>
     <table class="table table-striped">
@@ -23,7 +23,6 @@
             <th>#</th>
             <th>Name</th>
             <th>Post</th>
-            <th>Href</th>
         </tr>
         </thead>
         <tbody>
@@ -31,16 +30,19 @@
             <th th:text="${employee.getId()}">id</th>
             <td th:text="${employee.getName()}">name</td>
             <td th:text="${employee.getPost()}">department</td>
-            <td><a th:href="@{/employees/{id} (id=${employee.getId()})}">show more...</a></td>
         </tr>
         </tbody>
     </table>
-    <br>
-    <a th:href="@{/directors/{id}/edit (id=${director.getId()})}">EDIT</a>
-    <br>
-    <form th:method="DELETE" th:action="@{/directors/{id} (id=${director.getId()})}">
-        <input type="submit" value="DELETE">
-    </form>
+    <div style="display: flex; justify-content: space-between;">
+        <a th:href="@{/directors/{id}/edit (id=${director.getId()})}">EDIT</a>
+
+        <form th:method="DELETE" th:action="@{/directors/{id} (id=${director.getId()})}">
+            <input type="submit" value="DELETE">
+        </form>
+
+        <a th:href="@{/directors}">go to ALL directors</a>
+    </div>
+
 </div>
 </body>
 </html>
