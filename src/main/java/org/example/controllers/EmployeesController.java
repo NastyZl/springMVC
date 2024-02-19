@@ -5,6 +5,7 @@ import org.example.models.Director;
 import org.example.models.Employee;
 import org.example.service.DirectorService;
 import org.example.service.EmployeeService;
+import org.jboss.logging.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/employees")
 public class EmployeesController {
+    private static final Logger LOGGER = Logger.getLogger(DirectorsController.class);
+
     private final EmployeeService employeeService;
     private final DirectorService directorService;
 
@@ -58,11 +61,14 @@ public class EmployeesController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("employee") @Valid Employee employee, BindingResult bindingResult, @ModelAttribute("director") Director director) {
-        if (bindingResult.hasErrors()) {
-            return "redirect: employees/new";
+    public String create(@ModelAttribute("employee") @Valid Employee employee, BindingResult bindingResult, @ModelAttribute("director") Director director, Model model) {
+        if (bindingResult.hasFieldErrors("name")) {
+            model.addAttribute("directors", directorService.getDirectorDepartmentMap());
+            return "employees/new";
         }
         employeeService.saveEmployee(employee);
+        LOGGER.info("CREATE " + employee);
+
         return "employees/show";
     }
 
@@ -93,12 +99,15 @@ public class EmployeesController {
         if (bindingResult.hasErrors())
             return "employees/edit";
         employeeService.updateEmployee(id, employee);
+        LOGGER.info("UPDATE " + employee);
+
         return "redirect:/employees";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
         employeeService.deleteEmployee(id);
+        LOGGER.info("DELETE director witn id=" + id);
         return "redirect:/employees";
     }
 }

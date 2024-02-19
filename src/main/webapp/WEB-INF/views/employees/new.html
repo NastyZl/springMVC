@@ -9,12 +9,12 @@
 <body>
 <div class="container">
     <form th:method="POST" th:action="@{/employees}" th:object="${employee}">
-        <div style="display: flex;  justify-content: space-between;">
+        <div style="display: flex;  flex-direction: column;">
             <h1>Create new employee</h1>
             <div>
                 <label for="name">Name: </label>
                 <input th:field="*{name}" type="text" id="name"/>
-<!--                <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">ERROR NAME</div>-->
+                <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">ERROR NAME</div>
             </div>
             <br>
             <div>

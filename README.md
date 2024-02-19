@@ -1,9 +1,12 @@
 У одного Department может быть только один Director  
 У Director должно быть минимум три Employees  
-/directors - список Directors;
-/directors/{id} - карточка Director;
-/directors/{id}/edit - изменить Director;
-/directors/new - создать нового директора;
+При создании Employee его нужно назначить Director  
+Изменить список сотрудников у Director можно только на карточке сотрудника, изменив ему поле Department  
+CRUD операции определены у обеих сущностей
+
+start tut -> /directors - список Directors;  
+/employees - список Employees;
+
 
 
 ЗАДАНИЕ:

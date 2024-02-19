@@ -7,6 +7,7 @@ import org.example.models.Employee;
 import org.example.models.enums.Department;
 import org.example.service.DirectorService;
 import org.example.service.EmployeeService;
+import org.jboss.logging.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/directors")
 public class DirectorsController {
+    private static final Logger LOGGER = Logger.getLogger(DirectorsController.class);
     private final EmployeeService employeeService;
     private final DirectorService directorService;
 
@@ -72,6 +74,7 @@ public class DirectorsController {
         Director directorSave = (Director) model.getAttribute("director");
         if (directorSave != null) {
             directorService.saveDirector(directorSave);
+            LOGGER.info("CREATE " + directorSave);
             directorService.getDirectorById(directorSave.getId()).setSubordinateEmployees(employeeService.getAllEmployee().stream().filter(employee -> employee.getIdDirector() == directorSave.getId()).collect(Collectors.toList()));
         } else {
             throw new CustomException("chto-to tut ne tak...");
@@ -94,12 +97,14 @@ public class DirectorsController {
             throw new CustomException("The last director has not been fired yet((((");
         }
         directorService.updateDirector(id, director);
+        LOGGER.info("UPDATE " + director);
         return "redirect:/directors";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
         directorService.deleteDirector(id);
+        LOGGER.info("DELETE director witn id=" + id);
         return "redirect:/directors";
     }
 }
