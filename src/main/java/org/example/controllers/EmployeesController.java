@@ -1,21 +1,21 @@
 package org.example.controllers;
 
-import org.example.NoVacancyForDirectorException;
+import org.example.exception.CustomException;
 import org.example.models.Director;
 import org.example.models.Employee;
-import org.example.models.enums.Department;
 import org.example.service.DirectorService;
 import org.example.service.EmployeeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+@Validated
 @Controller
 @RequestMapping("/employees")
 public class EmployeesController {
@@ -32,10 +32,11 @@ public class EmployeesController {
         model.addAttribute("employees", employeeService.getAllEmployee());
         return "employees/index";
     }
+
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") int id, Model model) throws CustomException {
         model.addAttribute("employee", employeeService.getEmployeeById(id));
-        return "directors/show";
+        return "employees/show";
     }
 
     @GetMapping("/add-to-director")
@@ -57,9 +58,9 @@ public class EmployeesController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("employee") Employee employee, @ModelAttribute("director") Director director, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) throws NoVacancyForDirectorException {
-        if (bindingResult.hasFieldErrors("name")) {
-            return "directors/new";
+    public String create(@ModelAttribute("employee") @Valid Employee employee, BindingResult bindingResult, @ModelAttribute("director") Director director) {
+        if (bindingResult.hasErrors()) {
+            return "redirect: employees/new";
         }
         employeeService.saveEmployee(employee);
         return "employees/show";
@@ -76,5 +77,28 @@ public class EmployeesController {
     public String removeDirector(@RequestParam int employeeId) {
         employeeService.removeDirectorId(employeeId);
         return "redirect:/employees/new";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String edit(Model model, @PathVariable("id") int id) throws CustomException {
+        model.addAttribute("selectedDepartment", employeeService.getEmployeeById(id).getIdDirector());
+        model.addAttribute("directors", directorService.getDirectorDepartmentMap());
+        model.addAttribute("employee", employeeService.getEmployeeById(id));
+        model.addAttribute("selectedPost", employeeService.getEmployeeById(id).getPost());
+        return "employees/edit";
+    }
+
+    @PatchMapping("/{id}")
+    public String update(@ModelAttribute("employee") @Valid Employee employee, BindingResult bindingResult, @PathVariable("id") int id, @ModelAttribute("director") Director director) {
+        if (bindingResult.hasErrors())
+            return "employees/edit";
+        employeeService.updateEmployee(id, employee);
+        return "redirect:/employees";
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") int id) {
+        employeeService.deleteEmployee(id);
+        return "redirect:/employees";
     }
 }

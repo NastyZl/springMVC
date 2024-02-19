@@ -1,18 +1,20 @@
 package org.example.repository;
 
-import org.example.models.Director;
-
 import java.util.List;
 import java.util.Optional;
 
 
-public interface Repository<T>{
+public interface Repository<T> {
 
-    public List<T> findAll();
-    public Optional<T> findById(int id);
-    public void save(T item);
+    List<T> findAll();
 
-    public void update(int id, T item);
-    public void delete(int id);
-    public int count();
+    Optional<T> findById(int id);
+
+    void save(T item);
+
+    void update(int id, T item);
+
+    void delete(int id);
+
+    int count();
 }

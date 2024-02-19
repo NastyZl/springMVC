@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -9,10 +9,10 @@
 <body>
 <div class="container">
     <div style="display: flex; flex-direction: column; align-items: center;">
+        <h1>Error</h1>
         <h1>Pupupu...</h1>
-        <h2>It seems that there are no more available employees... </h2>
-        <br>
-        <a th:href="@{/employees}">click to go to the list of employees</a>
+        <p th:text="${message}">message</p>
+        <a href="javascript:history.back()">come back</a>
     </div>
 </div>
 </body>

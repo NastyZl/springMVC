@@ -24,11 +24,11 @@
     <div style="display: flex; justify-content: space-between;">
         <a th:href="@{/employees/{id}/edit (id=${employee.id})}">EDIT</a>
 
-        <form th:method="DELETE" th:action="@{/employees/{id} (id=${employee.id})">
+        <form th:method="DELETE" th:action="@{/employees/{id} (id=${employee.id})}">
             <input type="submit" value="DELETE">
         </form>
 
-        <a th:href="@{/employees}">go to ALL directors</a>
+        <a th:href="@{/employees}">go to ALL employees</a>
     </div>
 
 </div>

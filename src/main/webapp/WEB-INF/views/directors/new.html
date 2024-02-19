@@ -17,8 +17,8 @@
         </div>
         <br>
         <div>
-            <label for name="department">Department: </label>
-            <select name="department">
+            <label for="department">Department: </label>
+            <select name="department" id="department">
                 <option th:each="department : ${T(org.example.models.enums.Department).values()}"
                         th:value="${department}"
                         th:text="${department}">department
@@ -27,12 +27,10 @@
         </div>
         <div th:if="${error}" class="alert alert-danger" role="alert">
             <p th:text="${error}"></p>
-            <p>First he needs to be fired....</p>
+            <p>First director needs to be fired....</p>
         </div>
         <div><input type="submit" value="add employees"></div>
     </form>
-
-
 </div>
 </body>
 </html>

@@ -12,6 +12,7 @@ import java.util.Optional;
 public class EmployeeRepositoryImpl implements Repository<Employee> {
     private final List<Employee> employees;
     private int COUNT_EMPLOYEE;
+
     @PostConstruct
     public void postConstruct() {
         this.COUNT_EMPLOYEE = employees.size();

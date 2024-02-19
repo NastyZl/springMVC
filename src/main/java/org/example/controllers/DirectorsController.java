@@ -1,7 +1,7 @@
 package org.example.controllers;
 
 
-import org.example.NoVacancyForDirectorException;
+import org.example.exception.CustomException;
 import org.example.models.Director;
 import org.example.models.Employee;
 import org.example.models.enums.Department;
@@ -37,7 +37,7 @@ public class DirectorsController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") int id, Model model) throws CustomException {
         model.addAttribute("director", directorService.getDirectorById(id));
         return "directors/show";
     }
@@ -49,12 +49,12 @@ public class DirectorsController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("director") @Valid Director director, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) throws NoVacancyForDirectorException {
+    public String create(@ModelAttribute("director") @Valid Director director, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws CustomException {
         if (bindingResult.hasFieldErrors("name")) {
             return "directors/new";
         }
         if (directorService.isDirectorOfDepartmentPresent(director.getDepartment())) {
-            throw new NoVacancyForDirectorException("The last director has not been fired yet((((");
+            throw new CustomException("The director of this department already exists. You need to fire him");
         }
         director.setId(directorService.getNewId());
         redirectAttributes.addFlashAttribute("director", director);
@@ -62,7 +62,7 @@ public class DirectorsController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute("director") @Valid Director director, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    public String save(@ModelAttribute("director") @Valid Director director, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) throws CustomException {
         List<Employee> collect = employeeService.getAllEmployee().stream().filter(employee -> employee.getIdDirector() == director.getId()).collect(Collectors.toList());
         if (collect.size() < 3) {
             redirectAttributes.addFlashAttribute("bindingResult", bindingResult);
@@ -74,24 +74,24 @@ public class DirectorsController {
             directorService.saveDirector(directorSave);
             directorService.getDirectorById(directorSave.getId()).setSubordinateEmployees(employeeService.getAllEmployee().stream().filter(employee -> employee.getIdDirector() == directorSave.getId()).collect(Collectors.toList()));
         } else {
-            throw new RuntimeException("вы пытаетесь сохранить директора без самого директора...  так нельзя");
+            throw new CustomException("chto-to tut ne tak...");
         }
         return "directors/show";
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
+    public String edit(Model model, @PathVariable("id") int id) throws CustomException {
         model.addAttribute("director", directorService.getDirectorById(id));
         model.addAttribute("selectedDepartment", directorService.getDirectorById(id).getDepartment());
         return "directors/edit";
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("director") @Valid Director director, BindingResult bindingResult, @PathVariable("id") int id) throws NoVacancyForDirectorException {
+    public String update(@ModelAttribute("director") @Valid Director director, BindingResult bindingResult, @PathVariable("id") int id) throws CustomException {
         if (bindingResult.hasErrors()) return "directors/edit";
         boolean errorDepartmentUnavailable = directorService.getAllDirectors().stream().anyMatch(d -> director.getDepartment() == d.getDepartment() && director.getId() != d.getId());
         if (errorDepartmentUnavailable) {
-            throw new NoVacancyForDirectorException("The last director has not been fired yet((((");
+            throw new CustomException("The last director has not been fired yet((((");
         }
         directorService.updateDirector(id, director);
         return "redirect:/directors";
@@ -102,19 +102,4 @@ public class DirectorsController {
         directorService.deleteDirector(id);
         return "redirect:/directors";
     }
-
-    @DeleteMapping("/delete-employee")
-    public String deleteEmployee(@PathVariable("id") int id) {
-        directorService.deleteDirector(id);
-        return "redirect:/directors";
-    }
-
-
-//    @ExceptionHandler(NoVacancyForDirectorException.class)
-//    public void handlerException(Exception exception) {
-//        ModelAndView modelAndView = new ModelAndView();
-//
-//    }
-
-
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>EDIT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<form th:method="PATCH" th:action="@{/employees/{id} (id=${employee.id})}" th:object="${employee}">
+    <label for="name">Name</label>
+    <input th:field="*{name}" type="text" id="name"/>
+    <br>
+    <div>
+        <label for="post">Post: </label>
+        <select name="post" id="post">
+            <option th:each="post : ${T(org.example.models.enums.Post).values()}"
+                    th:value="${post}"
+                    th:text="${post}"
+                    th:selected="${post == selectedPost}">post
+            </option>
+        </select>
+    </div>
+    <div>
+        <label for="idDirector">Department: </label>
+        <select name="idDirector" id="idDirector">
+            <option th:each="director : ${directors}"
+                    th:value="${director.getKey()}"
+                    th:text="${director.getValue()}"
+                    th:selected="${department == selectedDepartment}">department
+            </option>
+            <option value="0"></option>
+        </select>
+    </div>
+    <br>
+    <input type="submit" value="upDate"/>
+</form>
+</body>
+</html>

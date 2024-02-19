@@ -56,15 +56,15 @@ public class SpringConfig implements WebMvcConfigurer {
         employees.add(new Employee(1, 1, "IVAN", Post.ANALYST));
         employees.add(new Employee(2, 1, "DASHA", Post.TESTER));
         employees.add(new Employee(3, 1, "SASHA", Post.DEVELOPER));
-        employees.add(new Employee(4, "IVAN", Post.ANALYST));
-        employees.add(new Employee(5, "DASHA", Post.TESTER));
-        employees.add(new Employee(6, "SASHA", Post.DEVELOPER));
-        employees.add(new Employee(7, "IVAN", Post.ANALYST));
-        employees.add(new Employee(8, "DASHA", Post.TESTER));
-        employees.add(new Employee(9, "SASHA", Post.DEVELOPER));
-        employees.add(new Employee(10, "IVAN", Post.ANALYST));
-        employees.add(new Employee(11, "DASHA", Post.TESTER));
-        employees.add(new Employee(12, "SASHA", Post.DEVELOPER));
+        employees.add(new Employee(4, "MASHA", Post.ARCHITECT));
+        employees.add(new Employee(5, "NASTY", Post.TESTER));
+        employees.add(new Employee(6, "DIMA", Post.DEVELOPER));
+        employees.add(new Employee(7, "IRINA", Post.ANALYST));
+        employees.add(new Employee(8, "KIRILL", Post.TESTER));
+        employees.add(new Employee(9, "ANTON", Post.DEVELOPER));
+        employees.add(new Employee(10, "VALERY", Post.ANALYST));
+        employees.add(new Employee(11, "EVGENY", Post.TESTER));
+        employees.add(new Employee(12, "ILYA", Post.DEVELOPER));
         return employees;
     }
 

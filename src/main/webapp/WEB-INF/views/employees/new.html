@@ -14,12 +14,12 @@
             <div>
                 <label for="name">Name: </label>
                 <input th:field="*{name}" type="text" id="name"/>
-                <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">ERROR NAME</div>
+<!--                <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">ERROR NAME</div>-->
             </div>
             <br>
             <div>
-                <label for name="post">Post: </label>
-                <select name="post">
+                <label for="post">Post: </label>
+                <select name="post" id="post">
                     <option th:each="post : ${T(org.example.models.enums.Post).values()}"
                             th:value="${post}"
                             th:text="${post}">post
@@ -27,8 +27,8 @@
                 </select>
             </div>
             <div>
-                <label for name="idDirector">Department: </label>
-                <select name="idDirector">
+                <label for="idDirector">Department: </label>
+                <select name="idDirector" id="idDirector">
                     <option th:each="director : ${directors}"
                             th:value="${director.getKey()}"
                             th:text="${director.getValue()}">department

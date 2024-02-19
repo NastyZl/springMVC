@@ -7,7 +7,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class Director {
@@ -70,10 +69,6 @@ public class Director {
     public void setSubordinateEmployees(List<Employee> subordinateEmployees) {
         this.subordinateEmployees = subordinateEmployees;
     }
-//    public void deleteSubordinateEmployees(int idEmployee) {
-//        subordinateEmployees.stream().filter(employee -> employee.getId() == idEmployee).findFirst().;
-//        this.subordinateEmployees = subordinateEmployees;
-//    }
 
     public void addSubordinateEmployee(Employee employee) {
         if (this.subordinateEmployees == null) {

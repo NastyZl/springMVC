@@ -26,7 +26,8 @@ public class Employee {
         this.post = post;
     }
 
-    public Employee() {}
+    public Employee() {
+    }
 
     public int getId() {
         return id;
