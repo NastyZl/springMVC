@@ -17,10 +17,17 @@
         <p style="padding-right: 10px;"><b>Post: </b></p>
         <p th:text="${employee.post}"></p>
     </div>
+
     <div style="display: flex">
         <p style="padding-right: 10px;"><b>Department: </b></p>
-        <p th:text="${employee.idDirector}"></p>
+        <div th:if="${directors.keySet().contains(employee.idDirector)}">
+            <div th:text="${directors.get(employee.idDirector)}">mmm</div>
+        </div>
+        <div th:unless="${directors.keySet().contains(employee.idDirector)}">
+            <div th:text="'Employee waits until he is assigned to the department'"></div>
+        </div>
     </div>
+
     <div style="display: flex; justify-content: space-between;">
         <a th:href="@{/employees/{id}/edit (id=${employee.id})}">EDIT</a>
 

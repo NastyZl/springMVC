@@ -85,7 +85,6 @@ public class DirectorsController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) throws CustomException {
         model.addAttribute("director", directorService.getDirectorById(id));
-        model.addAttribute("selectedDepartment", directorService.getDirectorById(id).getDepartment());
         return "directors/edit";
     }
 

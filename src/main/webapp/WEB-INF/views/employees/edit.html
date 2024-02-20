@@ -7,33 +7,36 @@
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-<form th:method="PATCH" th:action="@{/employees/{id} (id=${employee.id})}" th:object="${employee}">
-    <label for="name">Name</label>
-    <input th:field="*{name}" type="text" id="name"/>
-    <br>
-    <div>
-        <label for="post">Post: </label>
-        <select name="post" id="post">
-            <option th:each="post : ${T(org.example.models.enums.Post).values()}"
-                    th:value="${post}"
-                    th:text="${post}"
-                    th:selected="${post == selectedPost}">post
-            </option>
-        </select>
-    </div>
-    <div>
-        <label for="idDirector">Department: </label>
-        <select name="idDirector" id="idDirector">
-            <option th:each="director : ${directors}"
-                    th:value="${director.getKey()}"
-                    th:text="${director.getValue()}"
-                    th:selected="${department == selectedDepartment}">department
-            </option>
-            <option value="0"></option>
-        </select>
-    </div>
-    <br>
-    <input type="submit" value="upDate"/>
-</form>
+<div class="container">
+    <form th:method="PATCH" th:action="@{/employees/{id} (id=${employee.id})}" th:object="${employee}">
+        <label for="name">Name</label>
+        <input th:field="*{name}" type="text" id="name"/>
+        <br>
+        <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">ERROR NAME</div>
+        <div>
+            <label for="post">Post: </label>
+            <select name="post" id="post">
+                <option th:each="post : ${T(org.example.models.enums.Post).values()}"
+                        th:value="${post}"
+                        th:text="${post}"
+                        th:selected="${post == employee.post}">post
+                </option>
+            </select>
+        </div>
+        <div>
+            <label for="idDirector">Department: </label>
+            <select name="idDirector" id="idDirector">
+                <option th:each="director : ${directors}"
+                        th:value="${director.getKey()}"
+                        th:text="${director.getValue()}"
+                        th:selected="${director.getKey()==employee.idDirector}">department
+                </option>
+                <option value="0"></option>
+            </select>
+        </div>
+        <br>
+        <input type="submit" value="upDate"/>
+    </form>
+</div>
 </body>
 </html>

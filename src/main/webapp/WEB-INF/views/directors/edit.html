@@ -16,7 +16,7 @@
         <option th:each="department : ${T(org.example.models.enums.Department).values()}"
                 th:value="${department}"
                 th:text="${department}"
-                th:selected="${department == selectedDepartment}">dep
+                th:selected="${department == director.department}">dep
         </option>
     </select>
     <br>

@@ -43,7 +43,6 @@ public class DirectorRepositoryImpl implements Repository<Director> {
             directorToBeUpdated.setName(director.getName());
             directorToBeUpdated.setDepartment(director.getDepartment());
         });
-
     }
 
     @Override

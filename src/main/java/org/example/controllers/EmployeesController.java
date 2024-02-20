@@ -39,6 +39,7 @@ public class EmployeesController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) throws CustomException {
         model.addAttribute("employee", employeeService.getEmployeeById(id));
+        model.addAttribute("directors", directorService.getDirectorDepartmentMap());
         return "employees/show";
     }
 
@@ -87,27 +88,26 @@ public class EmployeesController {
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) throws CustomException {
-        model.addAttribute("selectedDepartment", employeeService.getEmployeeById(id).getIdDirector());
         model.addAttribute("directors", directorService.getDirectorDepartmentMap());
         model.addAttribute("employee", employeeService.getEmployeeById(id));
-        model.addAttribute("selectedPost", employeeService.getEmployeeById(id).getPost());
         return "employees/edit";
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("employee") @Valid Employee employee, BindingResult bindingResult, @PathVariable("id") int id, @ModelAttribute("director") Director director) {
-        if (bindingResult.hasErrors())
+    public String update(@ModelAttribute("employee") @Valid Employee employee, BindingResult bindingResult, Model model, @PathVariable("id") int id, @ModelAttribute("director") Director director) {
+        if (bindingResult.hasFieldErrors("name")) {
+            model.addAttribute("directors", directorService.getDirectorDepartmentMap());
             return "employees/edit";
+        }
         employeeService.updateEmployee(id, employee);
         LOGGER.info("UPDATE " + employee);
-
         return "redirect:/employees";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
         employeeService.deleteEmployee(id);
-        LOGGER.info("DELETE director witn id=" + id);
+        LOGGER.info("DELETE employee witn id=" + id);
         return "redirect:/employees";
     }
 }
